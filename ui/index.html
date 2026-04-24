@@ -12,63 +12,169 @@
         body {
             font-family: 'Outfit', sans-serif;
             background-color: #0b0f19;
+            background-image:
+                radial-gradient(at 0% 0%, rgba(59, 130, 246, 0.05) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(16, 185, 129, 0.05) 0px, transparent 50%);
+            background-attachment: fixed;
         }
 
+        /* Efeitos Glass Premium */
         .glass-panel {
-            background: rgba(30, 41, 59, 0.4);
-            backdrop-filter: blur(16px);
+            background: rgba(15, 23, 42, 0.4);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
             border: 1px solid rgba(255, 255, 255, 0.05);
         }
 
         .glass-card {
-            background: rgba(15, 23, 42, 0.6);
+            background: linear-gradient(145deg, rgba(30, 41, 59, 0.6) 0%, rgba(15, 23, 42, 0.8) 100%);
             border: 1px solid rgba(255, 255, 255, 0.08);
-            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.4);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .glass-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5);
+            transform: translateY(-3px);
+            box-shadow: 0 12px 30px -5px rgba(0, 0, 0, 0.5);
+            border-color: rgba(255, 255, 255, 0.12);
         }
 
-        /* Big Toggle (VPN) */
+        /* Scrollbar customizada */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        /* Big Toggle (VPN) Premium */
+        .toggle-wrapper {
+            position: relative;
+            width: 88px;
+            height: 44px;
+        }
+
         #vpn-toggle {
-            left: 0;
-            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.3s;
+            opacity: 0;
+            width: 0;
+            height: 0;
         }
 
-        #vpn-toggle:checked {
-            transform: translateX(72px);
+        .toggle-bg {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(30, 41, 59, 0.8);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            transition: .4s cubic-bezier(0.4, 0, 0.2, 1);
+            border-radius: 44px;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .toggle-bg:before {
+            position: absolute;
+            content: "";
+            height: 32px;
+            width: 32px;
+            left: 4px;
+            bottom: 4px;
+            background-color: #94a3b8;
+            transition: .4s cubic-bezier(0.4, 0, 0.2, 1);
+            border-radius: 50%;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+        }
+
+        #vpn-toggle:checked+.toggle-bg {
+            background-color: rgba(16, 185, 129, 0.2);
             border-color: #10b981;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2), 0 0 25px rgba(16, 185, 129, 0.3);
         }
 
-        #vpn-toggle:checked+.toggle-label {
+        #vpn-toggle:checked+.toggle-bg:before {
+            transform: translateX(44px);
             background-color: #10b981;
-            box-shadow: 0 0 20px rgba(16, 185, 129, 0.4);
+            box-shadow: 0 0 15px #10b981;
         }
 
-        /* Module Toggles */
-        .module-toggle {
+        /* Module Toggles menores */
+        .mod-toggle-bg {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
             left: 0;
-            transition: transform 0.2s ease-in-out, border-color 0.2s;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(30, 41, 59, 0.8);
+            transition: .3s;
+            border-radius: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
-        .module-toggle:checked {
-            transform: translateX(24px);
+        .mod-toggle-bg:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 2px;
+            bottom: 2px;
+            background-color: #94a3b8;
+            transition: .3s;
+            border-radius: 50%;
+        }
+
+        .module-toggle:checked+.mod-toggle-bg {
+            background-color: rgba(59, 130, 246, 0.3);
             border-color: #3b82f6;
         }
 
-        .module-toggle:checked+label {
+        .module-toggle:checked+.mod-toggle-bg:before {
+            transform: translateX(20px);
             background-color: #3b82f6;
+            box-shadow: 0 0 10px #3b82f6;
         }
 
-        /* Default off position */
+        /* Animações UI */
+        .fade-in {
+            animation: fadeIn 0.3s ease-out forwards;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
     </style>
     <script>
         tailwind.config = {
             darkMode: 'class',
             theme: {
-                extend: { colors: { darkbg: '#0b0f19', panel: '#1e293b', primary: '#3b82f6', accent: '#10b981' } }
+                extend: {
+                    colors: {
+                        darkbg: '#0b0f19',
+                        panel: '#1e293b',
+                        primary: '#3b82f6',
+                        accent: '#10b981'
+                    }
+                }
             }
         }
     </script>
@@ -76,34 +182,37 @@
 
 <body class="text-slate-200 min-h-screen flex overflow-hidden">
     <!-- Sidebar -->
-    <aside class="w-64 glass-panel border-r border-slate-800 flex flex-col justify-between hidden md:flex">
+    <aside class="w-64 glass-panel border-r border-slate-800 flex flex-col justify-between hidden md:flex z-20">
         <div class="p-6">
-            <div class="flex items-center gap-3 mb-10">
-                <i class="ph-fill ph-globe-hemisphere-west text-3xl text-primary"></i>
-                <h1 class="text-xl font-bold tracking-wide text-white">OpenMesh</h1>
+            <div class="flex items-center gap-3 mb-10 group cursor-default">
+                <div
+                    class="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-blue-600 flex items-center justify-center shadow-lg shadow-primary/20 group-hover:shadow-primary/40 transition-all">
+                    <i class="ph-fill ph-globe-hemisphere-west text-2xl text-white"></i>
+                </div>
+                <h1 class="text-2xl font-bold tracking-wide text-white">OpenMesh</h1>
             </div>
 
             <nav class="space-y-2">
                 <button onclick="changeView('dashboard')" id="nav-dashboard"
-                    class="w-full flex items-center gap-3 px-4 py-3 rounded-lg bg-primary/10 text-primary font-medium transition-colors">
+                    class="w-full flex items-center gap-3 px-4 py-3 rounded-xl bg-primary/10 text-primary border border-primary/20 font-medium transition-all shadow-[0_0_15px_rgba(59,130,246,0.1)]">
                     <i class="ph ph-squares-four text-xl"></i> Painel Principal
                 </button>
                 <button onclick="changeView('modules')" id="nav-modules"
-                    class="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-slate-400 hover:bg-slate-800/50 hover:text-slate-200 transition-colors">
-                    <i class="ph ph-puzzle-piece text-xl"></i> Módulos (Plugins)
+                    class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:bg-slate-800/50 hover:text-slate-200 border border-transparent transition-all">
+                    <i class="ph ph-puzzle-piece text-xl"></i> Módulos
                 </button>
                 <button onclick="changeView('network')" id="nav-network"
-                    class="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-slate-400 hover:bg-slate-800/50 hover:text-slate-200 transition-colors">
+                    class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:bg-slate-800/50 hover:text-slate-200 border border-transparent transition-all">
                     <i class="ph ph-users-three text-xl"></i> Minha Rede
                 </button>
             </nav>
         </div>
 
         <div class="p-6 border-t border-slate-800/50">
-            <button
-                class="w-full flex items-center gap-3 px-4 py-2 rounded-lg text-slate-500 hover:text-slate-300 transition-colors">
-                <i class="ph ph-gear text-xl"></i> Configurações
-            </button>
+            <div class="flex items-center gap-3 px-4 py-2 text-sm text-slate-500">
+                <i class="ph ph-shield-check text-emerald-500/50"></i>
+                <span>Engine v1.1.0</span>
+            </div>
         </div>
     </aside>
 
@@ -112,229 +221,490 @@
         <!-- Topbar -->
         <header
             class="h-20 flex items-center justify-between px-8 glass-panel border-b border-slate-800 sticky top-0 z-10">
-            <h2 id="page-title" class="text-2xl font-semibold text-white">Painel de Conexão</h2>
-            <div class="flex items-center gap-4">
-                <div class="flex items-center gap-2">
-                    <div id="top-indicator" class="w-2.5 h-2.5 rounded-full bg-slate-600"></div>
-                    <span id="top-status-text" class="text-sm font-medium text-slate-400">Desconectado</span>
-                </div>
-                <div
-                    class="w-8 h-8 rounded-full bg-gradient-to-tr from-primary to-purple-500 flex items-center justify-center text-white font-bold shadow-lg">
-                    <i class="ph ph-user"></i>
+            <h2 id="page-title" class="text-2xl font-semibold text-white tracking-tight">Painel de Conexão</h2>
+            <div class="flex items-center gap-6">
+                <div class="flex items-center gap-2 bg-slate-900/50 px-4 py-2 rounded-full border border-slate-800">
+                    <div id="top-indicator"
+                        class="w-2.5 h-2.5 rounded-full bg-slate-600 transition-colors duration-300"></div>
+                    <span id="top-status-text"
+                        class="text-sm font-medium text-slate-400 transition-colors duration-300">Desconectado</span>
                 </div>
             </div>
         </header>
 
-        <!-- Dynamic Views -->
-        <div class="p-8 max-w-6xl mx-auto w-full">
+        <!-- Dynamic Views Container -->
+        <div class="p-8 max-w-5xl mx-auto w-full pb-20">
 
-            <!-- VIEW: DASHBOARD -->
-            <div id="view-dashboard" class="space-y-8 block">
+            <!-- ================= VIEW: DASHBOARD ================= -->
+            <div id="view-dashboard" class="space-y-6 block fade-in">
                 <!-- Connect Hero Section -->
                 <div
-                    class="glass-card rounded-2xl p-10 flex flex-col items-center justify-center text-center relative overflow-hidden">
-                    <div class="absolute inset-0 bg-gradient-to-b from-primary/5 to-transparent pointer-events-none">
+                    class="glass-card rounded-3xl p-12 flex flex-col items-center justify-center text-center relative overflow-hidden">
+                    <div id="hero-glow"
+                        class="absolute inset-0 bg-gradient-to-b from-primary/5 to-transparent pointer-events-none transition-colors duration-700">
                     </div>
 
-                    <div class="mb-8">
-                        <h3 class="text-slate-400 font-medium mb-2 uppercase tracking-widest text-sm">Status da VPN</h3>
-                        <div class="flex items-center justify-center gap-4">
-                            <h1 id="main-status-text" class="text-5xl font-bold text-white tracking-tight">Offline</h1>
-                        </div>
+                    <div class="mb-10 relative z-10">
+                        <h3 class="text-slate-400 font-medium mb-3 uppercase tracking-[0.2em] text-xs">Status do Túnel
+                        </h3>
+                        <h1 id="main-status-text"
+                            class="text-6xl font-bold text-white tracking-tight transition-all duration-300">Offline
+                        </h1>
                     </div>
 
-                    <!-- Big Toggle -->
-                    <div
-                        class="relative inline-block w-32 h-14 align-middle select-none transition duration-200 ease-in mb-8">
-                        <input type="checkbox" name="toggle" id="vpn-toggle"
-                            class="toggle-checkbox absolute block w-14 h-14 rounded-full bg-white border-4 border-slate-700 appearance-none cursor-pointer z-10 transition-transform duration-300 ease-in-out left-0"
-                            onclick="toggleVPN()" />
-                        <label for="vpn-toggle"
-                            class="toggle-label block overflow-hidden h-14 rounded-full bg-slate-800 cursor-pointer transition-colors duration-300 ease-in-out shadow-inner"></label>
+                    <!-- Premium Big Toggle -->
+                    <div class="mb-10 relative z-10">
+                        <label class="toggle-wrapper block">
+                            <input type="checkbox" id="vpn-toggle" onclick="handleToggleClick()" />
+                            <span class="toggle-bg"></span>
+                        </label>
                     </div>
 
-                    <p id="status-message" class="text-slate-400 max-w-md mx-auto">Sua máquina está fora da OpenMesh.
-                        Clique no botão acima para ingressar na malha global.</p>
+                    <p id="status-message" class="text-slate-400 max-w-md mx-auto relative z-10 text-lg">
+                        Sua máquina está fora da OpenMesh. Clique no botão acima para ingressar.
+                    </p>
                 </div>
 
                 <!-- Info Cards -->
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div class="glass-card rounded-xl p-6 flex items-start gap-4">
-                        <div class="w-12 h-12 rounded-lg bg-blue-500/10 flex items-center justify-center text-blue-400">
-                            <i class="ph ph-desktop text-2xl"></i>
+                    <div class="glass-card rounded-2xl p-6 flex flex-col justify-between group">
+                        <div class="flex items-start justify-between mb-4">
+                            <div
+                                class="w-12 h-12 rounded-xl bg-blue-500/10 flex items-center justify-center text-blue-400 border border-blue-500/20 group-hover:bg-blue-500/20 transition-colors">
+                                <i class="ph ph-desktop text-2xl"></i>
+                            </div>
                         </div>
-                        <div class="flex-1">
+                        <div>
                             <p class="text-sm text-slate-400 mb-1">Identidade da Máquina</p>
                             <input type="text" id="machine-name" value="MeuPC"
-                                class="bg-transparent border-b border-slate-700 text-white font-semibold text-lg focus:outline-none focus:border-primary w-full pb-1"
+                                class="bg-transparent border-b border-slate-700/50 text-white font-semibold text-2xl focus:outline-none focus:border-primary w-full pb-1 transition-colors"
                                 placeholder="Nome do Computador">
-                            <p class="text-xs text-slate-500 mt-2">Como os outros verão você na rede.</p>
+                            <p class="text-xs text-slate-500 mt-2">Visível para outros peers na rede.</p>
                         </div>
                     </div>
 
-                    <div class="glass-card rounded-xl p-6 flex items-start gap-4">
-                        <div
-                            class="w-12 h-12 rounded-lg bg-emerald-500/10 flex items-center justify-center text-emerald-400">
-                            <i class="ph ph-share-network text-2xl"></i>
+                    <div
+                        class="glass-card rounded-2xl p-6 flex flex-col justify-between group relative overflow-hidden">
+                        <div id="ip-bg-glow"
+                            class="absolute -right-10 -top-10 w-40 h-40 bg-emerald-500/5 blur-3xl rounded-full transition-opacity duration-500 opacity-0">
                         </div>
-                        <div>
+                        <div class="flex items-start justify-between mb-4 relative z-10">
+                            <div
+                                class="w-12 h-12 rounded-xl bg-emerald-500/10 flex items-center justify-center text-emerald-400 border border-emerald-500/20 group-hover:bg-emerald-500/20 transition-colors">
+                                <i class="ph ph-share-network text-2xl"></i>
+                            </div>
+                        </div>
+                        <div class="relative z-10">
                             <p class="text-sm text-slate-400 mb-1">Endereço IP Virtual</p>
-                            <p id="virtual-ip" class="text-white font-mono text-xl">Aguardando...</p>
-                            <p class="text-xs text-slate-500 mt-2">Atribuído automaticamente pelo motor.</p>
+                            <p id="virtual-ip"
+                                class="text-slate-600 font-mono text-3xl font-medium tracking-tight transition-colors duration-300">
+                                --.--.--.--</p>
+                            <p class="text-xs text-slate-500 mt-2">Atribuído dinamicamente pelo motor.</p>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- VIEW: MODULES -->
+            <!-- ================= VIEW: MODULES ================= -->
             <div id="view-modules" class="hidden space-y-6">
-                <div class="flex items-center justify-between mb-8">
+                <div class="flex items-center justify-between mb-6">
                     <div>
-                        <h3 class="text-2xl font-bold text-white mb-2">Marketplace de Módulos</h3>
-                        <p class="text-slate-400">Expanda as funcionalidades da sua VPN instantaneamente.</p>
+                        <h3 class="text-3xl font-bold text-white mb-2 tracking-tight">Marketplace</h3>
+                        <p class="text-slate-400 text-lg">Expanda as funcionalidades da sua malha em tempo real.</p>
                     </div>
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="modules-container">
-                    <!-- Module Cards Injected Here -->
+                    <!-- Modules injected via JS -->
+                </div>
+            </div>
+
+            <!-- ================= VIEW: NETWORK ================= -->
+            <div id="view-network" class="hidden space-y-6">
+                <!-- Estado Offline da Rede -->
+                <div id="network-offline-msg" class="glass-card rounded-3xl p-16 text-center">
+                    <div class="w-20 h-20 bg-slate-800/50 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <i class="ph ph-plugs text-4xl text-slate-500"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-white mb-2">Rede Inacessível</h3>
+                    <p class="text-slate-400">Você precisa estar conectado à VPN para visualizar a topologia da rede.
+                    </p>
+                    <button onclick="changeView('dashboard')"
+                        class="mt-6 text-primary hover:text-blue-400 font-medium underline decoration-primary/30 underline-offset-4 transition-colors">
+                        Ir para o Painel Principal
+                    </button>
+                </div>
+
+                <!-- Conteúdo da Rede (Ativa) -->
+                <div id="network-content" class="hidden space-y-6">
+                    <!-- Host Info Card -->
+                    <div class="glass-card rounded-2xl p-8 relative overflow-hidden border-primary/20">
+                        <div class="absolute top-0 right-0 p-8 opacity-10 pointer-events-none">
+                            <i class="ph-fill ph-hard-drives text-8xl text-primary"></i>
+                        </div>
+                        <h3 class="text-lg font-medium text-slate-400 mb-6">Informações da Sessão</h3>
+
+                        <div class="flex flex-col md:flex-row gap-8">
+                            <div class="flex-1">
+                                <p class="text-sm text-slate-500 mb-1">Seu Papel na Rede</p>
+                                <div class="flex items-center gap-2">
+                                    <div id="role-icon"
+                                        class="w-2 h-2 rounded-full bg-blue-500 shadow-[0_0_8px_rgba(59,130,246,0.8)]">
+                                    </div>
+                                    <p id="display-role" class="text-white font-semibold text-xl">Analisando...</p>
+                                </div>
+                            </div>
+
+                            <div class="flex-1">
+                                <p class="text-sm text-slate-500 mb-1">Token da Rede (Senha)</p>
+                                <div class="flex items-center gap-3">
+                                    <code id="display-token"
+                                        class="bg-slate-900/80 px-4 py-2 rounded-lg text-emerald-400 font-mono text-lg border border-slate-700/50">********</code>
+                                    <button onclick="copyToken()"
+                                        class="w-10 h-10 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 flex items-center justify-center transition-colors border border-slate-700 hover:border-slate-500 group relative">
+                                        <i id="copy-icon"
+                                            class="ph ph-copy text-lg group-hover:scale-110 transition-transform"></i>
+                                    </button>
+                                </div>
+                                <p class="text-xs text-slate-500 mt-2">Compartilhe este token para novos membros
+                                    conectarem.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Peers List -->
+                    <div>
+                        <div class="flex items-center justify-between mb-4 px-2">
+                            <h3 class="text-xl font-bold text-white">Nós Conectados</h3>
+                            <span id="peer-count"
+                                class="bg-slate-800 text-slate-300 px-3 py-1 rounded-full text-sm font-medium border border-slate-700">0
+                                online</span>
+                        </div>
+
+                        <div class="glass-card rounded-2xl overflow-hidden">
+                            <ul id="peers-list" class="divide-y divide-slate-800/50">
+                                <!-- Lista injetada via JS -->
+                                <li class="p-6 text-center text-slate-500">Buscando peers na malha...</li>
+                            </ul>
+                        </div>
+                    </div>
                 </div>
             </div>
 
         </div>
     </main>
 
-    <!-- Connect Modal (Hidden) -->
+    <!-- Connect Modal -->
     <div id="connect-modal"
-        class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden flex items-center justify-center">
-        <div class="glass-card w-full max-w-md rounded-2xl p-8 border border-slate-700/50 shadow-2xl">
-            <div class="flex justify-between items-center mb-6">
-                <h3 class="text-xl font-bold text-white">Entrar em uma Rede</h3>
-                <button onclick="closeModal()" class="text-slate-400 hover:text-white"><i
-                        class="ph ph-x text-xl"></i></button>
+        class="fixed inset-0 bg-black/60 backdrop-blur-md z-50 hidden flex items-center justify-center transition-opacity duration-300 opacity-0">
+        <div class="glass-card w-full max-w-md rounded-3xl p-8 border border-slate-700/50 shadow-2xl transform scale-95 transition-transform duration-300"
+            id="connect-modal-content">
+            <div class="flex justify-between items-center mb-8">
+                <div>
+                    <h3 class="text-2xl font-bold text-white tracking-tight">Ingressar na Malha</h3>
+                    <p class="text-sm text-slate-400 mt-1">Insira os dados do Host para conectar.</p>
+                </div>
+                <button onclick="closeModal()"
+                    class="w-8 h-8 rounded-full bg-slate-800/50 flex items-center justify-center text-slate-400 hover:text-white hover:bg-slate-700 transition-colors">
+                    <i class="ph ph-x text-sm"></i>
+                </button>
             </div>
 
-            <div class="space-y-4 mb-8">
+            <div class="space-y-5 mb-8">
                 <div>
-                    <label class="block text-sm font-medium text-slate-400 mb-2">IP do Host Parceiro</label>
-                    <input type="text" id="target-ip"
-                        class="w-full bg-slate-900 border border-slate-700 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all"
-                        placeholder="ex: 177.50.20.10">
+                    <label class="block text-sm font-medium text-slate-400 mb-2">Endereço IP do Host</label>
+                    <div class="relative">
+                        <i class="ph ph-globe absolute left-4 top-1/2 -translate-y-1/2 text-slate-500"></i>
+                        <input type="text" id="target-ip"
+                            class="w-full bg-slate-900/50 border border-slate-700 rounded-xl pl-11 pr-4 py-3 text-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all placeholder:text-slate-600"
+                            placeholder="ex: 177.50.20.10">
+                    </div>
                 </div>
                 <div>
-                    <label class="block text-sm font-medium text-slate-400 mb-2">Nome do Host</label>
-                    <input type="text" id="target-name"
-                        class="w-full bg-slate-900 border border-slate-700 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all"
-                        placeholder="ex: ServidorMatriz">
+                    <label class="block text-sm font-medium text-slate-400 mb-2">Nome da Máquina Alvo</label>
+                    <div class="relative">
+                        <i class="ph ph-desktop absolute left-4 top-1/2 -translate-y-1/2 text-slate-500"></i>
+                        <input type="text" id="target-name"
+                            class="w-full bg-slate-900/50 border border-slate-700 rounded-xl pl-11 pr-4 py-3 text-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all placeholder:text-slate-600"
+                            placeholder="ex: ServidorMatriz">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-slate-400 mb-2">Token da Rede <span
+                            class="text-xs text-slate-500 font-normal">(Requerido)</span></label>
+                    <div class="relative">
+                        <i class="ph ph-key absolute left-4 top-1/2 -translate-y-1/2 text-slate-500"></i>
+                        <input type="text" id="target-token"
+                            class="w-full bg-slate-900/50 border border-slate-700 rounded-xl pl-11 pr-4 py-3 text-emerald-400 font-mono focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all placeholder:text-slate-600 font-medium"
+                            placeholder="ex: a1b2c3d4">
+                    </div>
                 </div>
             </div>
 
             <button onclick="startConnection(false)"
-                class="w-full bg-primary hover:bg-blue-600 text-white font-semibold py-3 px-4 rounded-xl transition-all shadow-lg shadow-blue-500/25 flex items-center justify-center gap-2">
-                <i class="ph ph-plug"></i> Conectar Agora
+                class="w-full bg-primary hover:bg-blue-600 text-white font-semibold py-3.5 px-4 rounded-xl transition-all shadow-[0_0_20px_rgba(59,130,246,0.3)] hover:shadow-[0_0_25px_rgba(59,130,246,0.5)] flex items-center justify-center gap-2 mb-4">
+                <i class="ph-bold ph-plug"></i> Conectar à Rede
             </button>
-            <div class="mt-4 text-center">
-                <button onclick="startConnection(true)"
-                    class="text-sm text-slate-400 hover:text-white underline decoration-slate-600 underline-offset-4 transition-all">Ou
-                    apenas Hospedar (Modo Servidor)</button>
+
+            <div class="relative flex items-center justify-center my-6">
+                <div class="absolute inset-0 flex items-center">
+                    <div class="w-full border-t border-slate-700/50"></div>
+                </div>
+                <span class="relative px-4 bg-[#141b2d] text-xs text-slate-500 uppercase tracking-widest">OU</span>
             </div>
+
+            <button onclick="startConnection(true)"
+                class="w-full bg-slate-800 hover:bg-slate-700 text-white font-medium py-3 px-4 rounded-xl transition-all border border-slate-700 hover:border-slate-500 flex items-center justify-center gap-2">
+                <i class="ph ph-hard-drives"></i> Criar Nova Rede (Hospedar)
+            </button>
         </div>
     </div>
 
     <script>
         let isVpnOn = false;
+        let currentView = 'dashboard';
 
+        // ================= NAVIGATION =================
         function changeView(viewName) {
+            currentView = viewName;
+
+            // Ocultar todas as views
             document.getElementById('view-dashboard').classList.add('hidden');
             document.getElementById('view-modules').classList.add('hidden');
+            document.getElementById('view-network').classList.add('hidden');
 
-            document.getElementById('nav-dashboard').className = 'w-full flex items-center gap-3 px-4 py-3 rounded-lg text-slate-400 hover:bg-slate-800/50 hover:text-slate-200 transition-colors';
-            document.getElementById('nav-modules').className = 'w-full flex items-center gap-3 px-4 py-3 rounded-lg text-slate-400 hover:bg-slate-800/50 hover:text-slate-200 transition-colors';
+            // Resetar botões nav
+            const navClasses = "w-full flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:bg-slate-800/50 hover:text-slate-200 border border-transparent transition-all";
+            document.getElementById('nav-dashboard').className = navClasses;
+            document.getElementById('nav-modules').className = navClasses;
+            document.getElementById('nav-network').className = navClasses;
 
-            document.getElementById('view-' + viewName).classList.remove('hidden');
-            document.getElementById('nav-' + viewName).className = 'w-full flex items-center gap-3 px-4 py-3 rounded-lg bg-primary/10 text-primary font-medium transition-colors';
+            // Mostrar view ativa e estilizar botão
+            const activeView = document.getElementById('view-' + viewName);
+            activeView.classList.remove('hidden');
+            activeView.classList.add('fade-in'); // Retrigger animation
 
+            document.getElementById('nav-' + viewName).className = "w-full flex items-center gap-3 px-4 py-3 rounded-xl bg-primary/10 text-primary border border-primary/20 font-medium transition-all shadow-[0_0_15px_rgba(59,130,246,0.1)]";
+
+            // Títulos
             if (viewName === 'dashboard') document.getElementById('page-title').innerText = "Painel de Conexão";
             if (viewName === 'modules') {
-                document.getElementById('page-title').innerText = "Módulos (Plugins)";
+                document.getElementById('page-title').innerText = "Módulos";
                 loadModules();
+            }
+            if (viewName === 'network') {
+                document.getElementById('page-title').innerText = "Topologia da Rede";
+                updateNetworkView();
             }
         }
 
-        function toggleVPN() {
+        // ================= VPN LOGIC & MODAL =================
+        function handleToggleClick() {
             const toggle = document.getElementById('vpn-toggle');
             if (toggle.checked && !isVpnOn) {
+                // Tentando ligar -> Abrir modal e manter toggle desligado visualmente até conectar
                 toggle.checked = false;
-                document.getElementById('connect-modal').classList.remove('hidden');
+                openModal();
             } else if (!toggle.checked && isVpnOn) {
-                isVpnOn = false;
-                updateVisualsOffline();
+                // Tentando desligar -> Chamar API de desconexão
+                disconnectVPN();
             }
+        }
+
+        function openModal() {
+            const modal = document.getElementById('connect-modal');
+            const content = document.getElementById('connect-modal-content');
+            modal.classList.remove('hidden');
+            // Trigger reflow for animation
+            void modal.offsetWidth;
+            modal.classList.remove('opacity-0');
+            content.classList.remove('scale-95');
         }
 
         function closeModal() {
-            document.getElementById('connect-modal').classList.add('hidden');
+            const modal = document.getElementById('connect-modal');
+            const content = document.getElementById('connect-modal-content');
+            modal.classList.add('opacity-0');
+            content.classList.add('scale-95');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 300);
+        }
+
+        async function disconnectVPN() {
+            try {
+                await fetch('http://127.0.0.1:8080/api/desconectar', { method: 'POST' });
+            } catch (e) { console.error("Erro ao desconectar", e); }
+
+            isVpnOn = false;
             document.getElementById('vpn-toggle').checked = false;
+            updateVisualsOffline();
         }
 
         async function startConnection(isHost) {
-            const nome = document.getElementById('machine-name').value;
+            const nome = document.getElementById('machine-name').value || 'MeuPC';
+            const tokenInput = document.getElementById('target-token').value.trim();
+
             closeModal();
+
+            // Visual feedback loading
             document.getElementById('vpn-toggle').checked = true;
-            isVpnOn = true;
-
             document.getElementById('main-status-text').innerText = 'Conectando...';
-            document.getElementById('main-status-text').className = 'text-5xl font-bold text-yellow-400 tracking-tight animate-pulse';
-            document.getElementById('status-message').innerText = 'Negociando túnel peer-to-peer...';
+            document.getElementById('main-status-text').className = 'text-6xl font-bold text-yellow-400 tracking-tight animate-pulse drop-shadow-[0_0_15px_rgba(250,204,21,0.3)]';
+            document.getElementById('status-message').innerText = 'Negociando criptografia e túnel peer-to-peer...';
+            document.getElementById('hero-glow').className = 'absolute inset-0 bg-gradient-to-b from-yellow-500/5 to-transparent pointer-events-none transition-colors duration-700';
 
-            if (isHost) {
-                await fetch('http://127.0.0.1:8080/api/hospedar', {
-                    method: 'POST', headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ nome_pc: nome })
-                });
-            } else {
-                const ip = document.getElementById('target-ip').value;
-                const alvo = document.getElementById('target-name').value;
-                await fetch('http://127.0.0.1:8080/api/conectar', {
-                    method: 'POST', headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ nome_pc: nome, ip_host: ip, alvo: alvo })
-                });
+            try {
+                if (isHost) {
+                    // Host mode - envia nome, backend gera o token se não enviado
+                    await fetch('http://127.0.0.1:8080/api/hospedar', {
+                        method: 'POST', headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ nome_pc: nome })
+                    });
+                } else {
+                    // Client mode - precisa de IP, alvo e token
+                    const ip = document.getElementById('target-ip').value;
+                    const alvo = document.getElementById('target-name').value;
+
+                    if (!ip || !alvo || !tokenInput) {
+                        alert("Para conectar, preencha IP, Nome do Alvo e Token.");
+                        disconnectVPN();
+                        return;
+                    }
+
+                    await fetch('http://127.0.0.1:8080/api/conectar', {
+                        method: 'POST', headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ nome_pc: nome, ip_host: ip, alvo: alvo, token: tokenInput })
+                    });
+                }
+                // O polling vai assumir a partir daqui e mudar para Verde quando API retornar sucesso
+            } catch (e) {
+                console.error("Erro na request", e);
+                disconnectVPN();
             }
         }
 
+        // ================= UI UPDATES =================
         function updateVisualsOffline() {
+            // Dashboard
             document.getElementById('main-status-text').innerText = 'Offline';
-            document.getElementById('main-status-text').className = 'text-5xl font-bold text-white tracking-tight';
-            document.getElementById('top-indicator').className = 'w-2.5 h-2.5 rounded-full bg-slate-600';
+            document.getElementById('main-status-text').className = 'text-6xl font-bold text-white tracking-tight transition-all duration-300';
+            document.getElementById('hero-glow').className = 'absolute inset-0 bg-gradient-to-b from-primary/5 to-transparent pointer-events-none transition-colors duration-700';
+            document.getElementById('status-message').innerText = 'Sua máquina está fora da OpenMesh. Clique no botão acima para ingressar.';
+            document.getElementById('virtual-ip').innerText = '--.--.--.--';
+            document.getElementById('virtual-ip').className = 'text-slate-600 font-mono text-3xl font-medium tracking-tight transition-colors duration-300';
+            document.getElementById('ip-bg-glow').classList.remove('opacity-100');
+            document.getElementById('ip-bg-glow').classList.add('opacity-0');
+
+            // Topbar
+            document.getElementById('top-indicator').className = 'w-2.5 h-2.5 rounded-full bg-slate-600 transition-colors duration-300';
             document.getElementById('top-status-text').innerText = 'Desconectado';
-            document.getElementById('virtual-ip').innerText = 'Aguardando...';
-            document.getElementById('virtual-ip').className = 'text-slate-500 font-mono text-xl';
-            document.getElementById('status-message').innerText = 'Sua máquina está fora da OpenMesh. Clique no botão acima para ingressar na malha global.';
+            document.getElementById('top-status-text').className = 'text-sm font-medium text-slate-400 transition-colors duration-300';
+
+            // Update views if active
+            if (currentView === 'network') updateNetworkView();
         }
 
         function updateVisualsOnline(ip) {
-            document.getElementById('main-status-text').innerText = 'Protegido';
-            document.getElementById('main-status-text').className = 'text-5xl font-bold text-emerald-400 tracking-tight drop-shadow-[0_0_15px_rgba(16,185,129,0.5)]';
-            document.getElementById('top-indicator').className = 'w-2.5 h-2.5 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.8)]';
-            document.getElementById('top-status-text').innerText = 'Túnel Estabelecido';
-            document.getElementById('top-status-text').className = 'text-sm font-medium text-emerald-400';
-            document.getElementById('virtual-ip').innerText = ip;
-            document.getElementById('virtual-ip').className = 'text-white font-mono text-xl';
+            if (!isVpnOn) isVpnOn = true;
             document.getElementById('vpn-toggle').checked = true;
-            document.getElementById('status-message').innerText = 'Você está trafegando com criptografia peer-to-peer dentro da malha.';
-            isVpnOn = true;
+
+            // Dashboard
+            document.getElementById('main-status-text').innerText = 'Protegido';
+            document.getElementById('main-status-text').className = 'text-6xl font-bold text-emerald-400 tracking-tight transition-all duration-300 drop-shadow-[0_0_20px_rgba(16,185,129,0.4)]';
+            document.getElementById('hero-glow').className = 'absolute inset-0 bg-gradient-to-b from-emerald-500/10 to-transparent pointer-events-none transition-colors duration-700';
+            document.getElementById('status-message').innerText = 'Você está trafegando com criptografia militar dentro da malha P2P.';
+            document.getElementById('virtual-ip').innerText = ip;
+            document.getElementById('virtual-ip').className = 'text-white font-mono text-3xl font-bold tracking-tight transition-colors duration-300 drop-shadow-[0_0_10px_rgba(255,255,255,0.3)]';
+            document.getElementById('ip-bg-glow').classList.remove('opacity-0');
+            document.getElementById('ip-bg-glow').classList.add('opacity-100');
+
+            // Topbar
+            document.getElementById('top-indicator').className = 'w-2.5 h-2.5 rounded-full bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.8)] transition-colors duration-300';
+            document.getElementById('top-status-text').innerText = 'Túnel Estabelecido';
+            document.getElementById('top-status-text').className = 'text-sm font-medium text-emerald-400 transition-colors duration-300';
         }
 
-        setInterval(async () => {
-            if (!isVpnOn) return;
-            try {
-                const res = await fetch('http://127.0.0.1:8080/api/status');
-                const data = await res.json();
-                if (data.status === 'conectado' || data.status === 'online') {
-                    updateVisualsOnline(data.vpn_ip);
-                }
-            } catch (e) { }
-        }, 2000);
+        // ================= NETWORK VIEW LOGIC =================
+        async function updateNetworkView() {
+            const offlineMsg = document.getElementById('network-offline-msg');
+            const content = document.getElementById('network-content');
 
+            if (!isVpnOn) {
+                offlineMsg.classList.remove('hidden');
+                content.classList.add('hidden');
+                return;
+            }
+
+            offlineMsg.classList.add('hidden');
+            content.classList.remove('hidden');
+
+            try {
+                // Fetch Role & Token
+                const infoRes = await fetch('http://127.0.0.1:8080/api/network/info');
+                const info = await infoRes.json();
+
+                document.getElementById('display-token').innerText = info.token || 'Indisponível';
+                if (info.is_host) {
+                    document.getElementById('display-role').innerText = 'Host (Servidor)';
+                    document.getElementById('display-role').className = 'text-white font-semibold text-xl';
+                    document.getElementById('role-icon').className = 'w-2.5 h-2.5 rounded-full bg-purple-500 shadow-[0_0_10px_rgba(168,85,247,0.8)]';
+                } else {
+                    document.getElementById('display-role').innerText = 'Peer (Cliente)';
+                    document.getElementById('display-role').className = 'text-slate-300 font-medium text-xl';
+                    document.getElementById('role-icon').className = 'w-2 h-2 rounded-full bg-blue-500 shadow-[0_0_8px_rgba(59,130,246,0.8)]';
+                }
+
+                // Fetch Peers
+                const peersRes = await fetch('http://127.0.0.1:8080/api/network/peers');
+                const peersData = await peersRes.json();
+                renderPeers(peersData.peers || []);
+
+            } catch (e) {
+                console.error("Erro ao buscar info da rede", e);
+            }
+        }
+
+        function renderPeers(peers) {
+            const list = document.getElementById('peers-list');
+            document.getElementById('peer-count').innerText = `${peers.length} online`;
+
+            if (peers.length === 0) {
+                list.innerHTML = `<li class="p-8 text-center text-slate-500 flex flex-col items-center gap-3"><i class="ph ph-ghost text-3xl"></i>Nenhum outro peer conectado no momento.</li>`;
+                return;
+            }
+
+            list.innerHTML = peers.map(peer => `
+                <li class="p-4 flex items-center justify-between hover:bg-slate-800/30 transition-colors">
+                    <div class="flex items-center gap-4">
+                        <div class="w-10 h-10 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center text-slate-300">
+                            <i class="ph-fill ph-desktop"></i>
+                        </div>
+                        <div>
+                            <p class="text-white font-medium">${peer.nome}</p>
+                            <p class="text-xs text-slate-500">IP VPN: <span class="text-slate-400 font-mono">${peer.vpn_ip}</span></p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-2 bg-emerald-500/10 px-3 py-1 rounded-full border border-emerald-500/20">
+                        <div class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></div>
+                        <span class="text-xs text-emerald-400 font-medium">Ativo</span>
+                    </div>
+                </li>
+            `).join('');
+        }
+
+        function copyToken() {
+            const tokenText = document.getElementById('display-token').innerText;
+            navigator.clipboard.writeText(tokenText).then(() => {
+                const icon = document.getElementById('copy-icon');
+                icon.className = "ph-fill ph-check-circle text-emerald-400 text-lg scale-110";
+                setTimeout(() => {
+                    icon.className = "ph ph-copy text-lg group-hover:scale-110 transition-transform";
+                }, 2000);
+            });
+        }
+
+        // ================= MODULES LOGIC =================
         async function loadModules() {
             try {
                 const res = await fetch('http://127.0.0.1:8080/api/modules');
@@ -345,20 +715,28 @@
                 modules.forEach(mod => {
                     const isActive = mod.active;
                     const card = document.createElement('div');
-                    card.className = `glass-card rounded-2xl p-6 border ${isActive ? 'border-primary/50 ring-1 ring-primary/20 bg-primary/5' : 'border-slate-800'}`;
-                    
+
+                    // Estilo dinâmico baseado no status
+                    card.className = `glass-card rounded-2xl p-6 flex flex-col justify-between h-full ${isActive ? 'border-primary/50 shadow-[0_0_20px_rgba(59,130,246,0.1)] bg-primary/5' : 'border-slate-800'}`;
+
                     card.innerHTML = `
-                        <div class="flex justify-between items-start mb-4">
-                            <div class="w-12 h-12 rounded-xl bg-slate-800/80 flex items-center justify-center text-white text-2xl shadow-inner">
-                                ${mod.icon || '📦'}
+                        <div>
+                            <div class="flex justify-between items-start mb-6">
+                                <div class="w-14 h-14 rounded-2xl ${isActive ? 'bg-primary/20 text-primary border-primary/30 shadow-inner' : 'bg-slate-800/80 text-slate-400 border-slate-700/50'} border flex items-center justify-center text-3xl transition-colors">
+                                    ${mod.icon || '📦'}
+                                </div>
+                                <div class="relative inline-block w-10 h-6 align-middle select-none">
+                                    <input type="checkbox" id="mod-${mod.id}" ${isActive ? 'checked' : ''} class="module-toggle absolute opacity-0 w-0 h-0" onchange="toggleModule('${mod.id}', this.checked)"/>
+                                    <label for="mod-${mod.id}" class="mod-toggle-bg"></label>
+                                </div>
                             </div>
-                            <div class="relative inline-block w-12 h-6 align-middle select-none">
-                                <input type="checkbox" id="mod-${mod.id}" ${isActive ? 'checked' : ''} class="module-toggle absolute block w-6 h-6 rounded-full bg-white border-2 border-slate-700 appearance-none cursor-pointer z-10" onclick="toggleModule('${mod.id}', this.checked)"/>
-                                <label for="mod-${mod.id}" class="block overflow-hidden h-6 rounded-full bg-slate-800 cursor-pointer transition-colors duration-300"></label>
-                            </div>
+                            <h4 class="text-xl font-bold text-white mb-2 tracking-tight">${mod.name}</h4>
+                            <p class="text-sm text-slate-400 leading-relaxed mb-4">${mod.description}</p>
                         </div>
-                        <h4 class="text-lg font-bold text-white mb-1">${mod.name}</h4>
-                        <p class="text-sm text-slate-400 leading-relaxed">${mod.description}</p>
+                        <div class="mt-auto pt-4 border-t border-slate-700/30 flex items-center justify-between">
+                            <span class="text-xs uppercase tracking-wider font-semibold ${isActive ? 'text-primary' : 'text-slate-500'}">${isActive ? 'Em Execução' : 'Pausado'}</span>
+                            ${mod.requires_admin ? '<i class="ph-fill ph-shield-warning text-yellow-500/70 text-lg" title="Requer Privilégios"></i>' : ''}
+                        </div>
                     `;
                     container.appendChild(card);
                 });
@@ -368,16 +746,52 @@
         }
 
         async function toggleModule(id, state) {
-            await fetch('http://127.0.0.1:8080/api/modules/toggle', {
-                method: 'POST', headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ id: id, active: state })
-            });
-            setTimeout(loadModules, 200);
+            try {
+                await fetch('http://127.0.0.1:8080/api/modules/toggle', {
+                    method: 'POST', headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ id: id, active: state })
+                });
+                setTimeout(loadModules, 300); // Reload visual state
+            } catch (e) {
+                console.error("Erro ao alternar módulo", e);
+                loadModules(); // Revert em caso de erro
+            }
         }
 
-        // Initialize modules right away so they are ready
-        setTimeout(loadModules, 1000);
+        // ================= GLOBAL POLLING =================
+        setInterval(async () => {
+            try {
+                // Poll Status VPN
+                const res = await fetch('http://127.0.0.1:8080/api/status');
+                const data = await res.json();
 
+                if (data.status === 'conectado' || data.status === 'online') {
+                    if (!isVpnOn || document.getElementById('virtual-ip').innerText === '--.--.--.--') {
+                        updateVisualsOnline(data.vpn_ip);
+                    }
+                } else {
+                    if (isVpnOn) {
+                        isVpnOn = false;
+                        updateVisualsOffline();
+                    }
+                }
+
+                // Poll Network se a view estiver ativa e VPN online
+                if (isVpnOn && currentView === 'network') {
+                    updateNetworkView();
+                }
+
+            } catch (e) {
+                // Servidor Flask offline
+                if (isVpnOn) {
+                    isVpnOn = false;
+                    updateVisualsOffline();
+                }
+            }
+        }, 2000);
+
+        // Inicialização
+        document.getElementById('target-token').value = ""; // Clear browser autofill cache
     </script>
 </body>
 

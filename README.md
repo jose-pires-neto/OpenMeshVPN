@@ -1,45 +1,77 @@
-🌐 OpenMeshVPN (Nome Provisório)
+# 🌐 OpenMeshVPN
 
-Uma rede P2P (VPN Mesh) Open Source, leve e segura para conectar computadores como se estivessem na mesma rede LAN, sem precisar de configurações complexas de roteador. Ideal para jogos em LAN, compartilhamento seguro de arquivos e comunidades.
+OpenMeshVPN é uma solução de rede P2P (Mesh VPN) de código aberto, projetada para ser leve, segura e extremamente simples de usar. Conecte seus dispositivos como se estivessem na mesma rede local (LAN), independente de onde estejam no mundo.
 
-🎯 Objetivos do Projeto
+---
 
-Zero Configuração: O usuário instala, loga e já está na rede. Sem abrir portas em roteadores (Zero Port Forwarding).
+## 🚀 Funcionalidades Atuais
 
-Segurança Padrão (Secure by Default): Todo o tráfego P2P será criptografado de ponta a ponta. Nenhum PC expõe portas públicas desnecessárias.
+- **Conexão P2P Criptografada**: Tráfego seguro entre peers usando ChaCha20Poly1305.
+- **UDP Hole Punching**: Conecte-se através de firewalls e NAT sem abrir portas no roteador.
+- **Sistema de Módulos**: Expanda as funcionalidades com módulos como *Game Boost* e *File Sharing*.
+- **Interface Premium**: Dashboard moderno construído com Electron e Tailwind CSS.
 
-Descentralização: O servidor central apenas "apresenta" os PCs. O tráfego de dados real (o jogo, os arquivos) vai diretamente de um PC para o outro (P2P).
+---
 
-🏗️ Como Funciona (Arquitetura)
+## 🛠️ Como Gerar os Executáveis (Build)
 
-O sistema é dividido em duas partes principais:
+O projeto é composto por um backend em **Python** e um frontend em **Electron**. Para gerar o executável final autônomo, seguimos dois passos:
 
-1. Control Plane (Servidor de Sinalização)
+### Pré-requisitos
+- [Node.js](https://nodejs.org/) (v18+)
+- [Python 3.11+](https://www.python.org/)
+- Pip (gerenciador de pacotes do Python)
 
-Um servidor leve rodando na nuvem. Sua única função é:
+### 1. Compilar o Backend (Python)
+Transformamos o backend em um executável autônomo para que o usuário final não precise instalar Python.
+```bash
+# Instale as dependências do Python
+pip install -r Windows/requirements.txt pyinstaller
 
-Autenticar os usuários.
+# Gere o backend.exe
+npm run build:backend
+```
+*O executável será gerado em `dist_py/backend.exe`.*
 
-Descobrir qual é o IP público e a porta que o roteador de cada PC está usando.
+### 2. Gerar o Instalador Final (Electron)
+O Electron Builder irá empacotar a interface e o `backend.exe` em um instalador `.exe`.
+```bash
+# Instale as dependências do Node
+npm install
 
-Trocar essas informações de IP e chaves públicas entre os computadores que querem se conectar.
+# Gere o instalador (NSIS)
+npm run build:win
+```
+*O resultado final estará na pasta `release/`.*
 
-2. Data Plane (Cliente no PC do Usuário)
+---
 
-O programa que roda no computador do usuário.
+## 💻 Desenvolvimento Local
 
-Comunica-se com o Control Plane para anunciar sua presença.
+Para rodar o projeto em modo de desenvolvimento:
 
-Usa a técnica de UDP Hole Punching para forçar o roteador a permitir a conexão direta com o PC do amigo.
+1. Inicie o backend Python:
+   ```bash
+   cd Windows
+   python main.py
+   ```
+2. Em outro terminal, inicie o Electron:
+   ```bash
+   npm start
+   ```
 
-(Futuro) Cria uma interface de rede virtual (TUN) para que os jogos reconheçam a conexão como uma placa de rede física.
+---
 
-🚀 Como Contribuir
+## 📂 Estrutura do Projeto
 
-Este é um projeto Open Source! Precisamos de ajuda com:
+- `Windows/`: Core do sistema e API Flask para Windows.
+- `ui/`: Interface HTML/CSS/JS.
+- `modules/`: Plugins e extensões de funcionalidade.
+- `main.js`: Ponto de entrada do Electron.
+- `backend.spec`: Configuração do PyInstaller.
 
-Segurança (Implementação de chaves criptográficas).
+---
 
-Desenvolvimento do Cliente (Interface TUN/TAP).
+## 📝 Licença
 
-UI/UX (Criar um painel simples e bonito para os usuários).
+Este projeto é open-source sob a licença [MIT](LICENSE).

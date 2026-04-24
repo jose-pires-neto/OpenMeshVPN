@@ -1,1 +1,46 @@
-node_modules
+# ── Node.js ──────────────────────────────────────
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# ── Python ───────────────────────────────────────
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyo
+*.pyd
+.Python
+venv/
+env/
+.env
+*.egg-info/
+*.spec
+
+# ── Build & Distribution ─────────────────────────
+dist/
+build/
+out/
+release/
+dist_py/
+dist_electron/
+*.exe
+*.zip
+
+# ── Configuração local do usuário ────────────────
+config.json
+*.local.json
+
+# ── Logs ─────────────────────────────────────────
+*.log
+logs/
+
+# ── OS Artifacts ─────────────────────────────────
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ── IDE ──────────────────────────────────────────
+.vscode/
+.idea/
+*.sublime-workspace

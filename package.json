@@ -1,15 +1,88 @@
 {
   "name": "openmeshvpn",
-  "version": "1.0.0",
-  "description": "🌐 OpenMeshVPN (Nome Provisório)",
+  "version": "1.1.0",
+  "description": "🌐 OpenMeshVPN — Rede P2P Open Source com módulos extensíveis",
   "main": "main.js",
+  "author": "jose-pires-neto",
+  "license": "MIT",
   "scripts": {
-    "start": "electron ."
+    "start": "electron .",
+    "dev": "electron . --inspect",
+    "build:backend": "pyinstaller backend.spec --distpath dist_py --workpath dist_py/build --noconfirm",
+    "build:win": "npm run build:backend && npx electron-builder --win --publish never",
+    "build:linux": "electron-builder --linux",
+    "build:mac": "electron-builder --mac",
+    "dist": "electron-builder"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "keywords": [
+    "vpn",
+    "p2p",
+    "mesh",
+    "networking",
+    "open-source"
+  ],
   "devDependencies": {
-    "electron": "^41.3.0"
+    "electron": "^41.3.0",
+    "electron-builder": "^25.1.8"
+  },
+  "build": {
+    "appId": "io.openmeshvpn.app",
+    "productName": "OpenMeshVPN",
+    "copyright": "Copyright © 2026 OpenMeshVPN Contributors",
+    "forceCodeSigning": false,
+    "directories": {
+      "output": "release"
+    },
+    "extraResources": [
+      {
+        "from": "dist_py/backend.exe",
+        "to": "backend.exe"
+      }
+    ],
+    "files": [
+      "main.js",
+      "preload.js",
+      "ui/**/*",
+      "!ui/icon.png",
+      "!**/__pycache__/**",
+      "!**/*.pyc",
+      "!node_modules/**",
+      "!Windows/**",
+      "!Linux/**",
+      "!MacOS/**",
+      "!modules/**",
+      "!dist_py/**",
+      "!release/**",
+      "!backend.spec"
+    ],
+    "win": {
+      "target": [
+        "portable"
+      ],
+      "icon": "ui/icon.ico"
+    },
+    "linux": {
+      "target": [
+        "AppImage",
+        "deb"
+      ],
+      "category": "Network"
+    },
+    "mac": {
+      "target": [
+        "dmg"
+      ],
+      "category": "public.app-category.utilities"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "OpenMeshVPN",
+      "installerIcon": "ui/icon.ico",
+      "uninstallerIcon": "ui/icon.ico",
+      "installerHeaderIcon": "ui/icon.ico"
+    }
   }
 }
