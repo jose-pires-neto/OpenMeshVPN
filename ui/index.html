@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OpenMesh VPN</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <style>
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: #0b0f19;
+        }
+
+        .glass-panel {
+            background: rgba(30, 41, 59, 0.4);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .glass-card {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .glass-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Big Toggle (VPN) */
+        #vpn-toggle {
+            left: 0;
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.3s;
+        }
+
+        #vpn-toggle:checked {
+            transform: translateX(72px);
+            border-color: #10b981;
+        }
+
+        #vpn-toggle:checked+.toggle-label {
+            background-color: #10b981;
+            box-shadow: 0 0 20px rgba(16, 185, 129, 0.4);
+        }
+
+        /* Module Toggles */
+        .module-toggle {
+            left: 0;
+            transition: transform 0.2s ease-in-out, border-color 0.2s;
+        }
+
+        .module-toggle:checked {
+            transform: translateX(24px);
+            border-color: #3b82f6;
+        }
+
+        .module-toggle:checked+label {
+            background-color: #3b82f6;
+        }
+
+        /* Default off position */
+    </style>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: { colors: { darkbg: '#0b0f19', panel: '#1e293b', primary: '#3b82f6', accent: '#10b981' } }
+            }
+        }
+    </script>
+</head>
+
+<body class="text-slate-200 min-h-screen flex overflow-hidden">
+    <!-- Sidebar -->
+    <aside class="w-64 glass-panel border-r border-slate-800 flex flex-col justify-between hidden md:flex">
+        <div class="p-6">
+            <div class="flex items-center gap-3 mb-10">
+                <i class="ph-fill ph-globe-hemisphere-west text-3xl text-primary"></i>
+                <h1 class="text-xl font-bold tracking-wide text-white">OpenMesh</h1>
+            </div>
+
+            <nav class="space-y-2">
+                <button onclick="changeView('dashboard')" id="nav-dashboard"
+                    class="w-full flex items-center gap-3 px-4 py-3 rounded-lg bg-primary/10 text-primary font-medium transition-colors">
+                    <i class="ph ph-squares-four text-xl"></i> Painel Principal
+                </button>
+                <button onclick="changeView('modules')" id="nav-modules"
+                    class="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-slate-400 hover:bg-slate-800/50 hover:text-slate-200 transition-colors">
+                    <i class="ph ph-puzzle-piece text-xl"></i> Módulos (Plugins)
+                </button>
+                <button onclick="changeView('network')" id="nav-network"
+                    class="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-slate-400 hover:bg-slate-800/50 hover:text-slate-200 transition-colors">
+                    <i class="ph ph-users-three text-xl"></i> Minha Rede
+                </button>
+            </nav>
+        </div>
+
+        <div class="p-6 border-t border-slate-800/50">
+            <button
+                class="w-full flex items-center gap-3 px-4 py-2 rounded-lg text-slate-500 hover:text-slate-300 transition-colors">
+                <i class="ph ph-gear text-xl"></i> Configurações
+            </button>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 flex flex-col relative overflow-y-auto">
+        <!-- Topbar -->
+        <header
+            class="h-20 flex items-center justify-between px-8 glass-panel border-b border-slate-800 sticky top-0 z-10">
+            <h2 id="page-title" class="text-2xl font-semibold text-white">Painel de Conexão</h2>
+            <div class="flex items-center gap-4">
+                <div class="flex items-center gap-2">
+                    <div id="top-indicator" class="w-2.5 h-2.5 rounded-full bg-slate-600"></div>
+                    <span id="top-status-text" class="text-sm font-medium text-slate-400">Desconectado</span>
+                </div>
+                <div
+                    class="w-8 h-8 rounded-full bg-gradient-to-tr from-primary to-purple-500 flex items-center justify-center text-white font-bold shadow-lg">
+                    <i class="ph ph-user"></i>
+                </div>
+            </div>
+        </header>
+
+        <!-- Dynamic Views -->
+        <div class="p-8 max-w-6xl mx-auto w-full">
+
+            <!-- VIEW: DASHBOARD -->
+            <div id="view-dashboard" class="space-y-8 block">
+                <!-- Connect Hero Section -->
+                <div
+                    class="glass-card rounded-2xl p-10 flex flex-col items-center justify-center text-center relative overflow-hidden">
+                    <div class="absolute inset-0 bg-gradient-to-b from-primary/5 to-transparent pointer-events-none">
+                    </div>
+
+                    <div class="mb-8">
+                        <h3 class="text-slate-400 font-medium mb-2 uppercase tracking-widest text-sm">Status da VPN</h3>
+                        <div class="flex items-center justify-center gap-4">
+                            <h1 id="main-status-text" class="text-5xl font-bold text-white tracking-tight">Offline</h1>
+                        </div>
+                    </div>
+
+                    <!-- Big Toggle -->
+                    <div
+                        class="relative inline-block w-32 h-14 align-middle select-none transition duration-200 ease-in mb-8">
+                        <input type="checkbox" name="toggle" id="vpn-toggle"
+                            class="toggle-checkbox absolute block w-14 h-14 rounded-full bg-white border-4 border-slate-700 appearance-none cursor-pointer z-10 transition-transform duration-300 ease-in-out left-0"
+                            onclick="toggleVPN()" />
+                        <label for="vpn-toggle"
+                            class="toggle-label block overflow-hidden h-14 rounded-full bg-slate-800 cursor-pointer transition-colors duration-300 ease-in-out shadow-inner"></label>
+                    </div>
+
+                    <p id="status-message" class="text-slate-400 max-w-md mx-auto">Sua máquina está fora da OpenMesh.
+                        Clique no botão acima para ingressar na malha global.</p>
+                </div>
+
+                <!-- Info Cards -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="glass-card rounded-xl p-6 flex items-start gap-4">
+                        <div class="w-12 h-12 rounded-lg bg-blue-500/10 flex items-center justify-center text-blue-400">
+                            <i class="ph ph-desktop text-2xl"></i>
+                        </div>
+                        <div class="flex-1">
+                            <p class="text-sm text-slate-400 mb-1">Identidade da Máquina</p>
+                            <input type="text" id="machine-name" value="MeuPC"
+                                class="bg-transparent border-b border-slate-700 text-white font-semibold text-lg focus:outline-none focus:border-primary w-full pb-1"
+                                placeholder="Nome do Computador">
+                            <p class="text-xs text-slate-500 mt-2">Como os outros verão você na rede.</p>
+                        </div>
+                    </div>
+
+                    <div class="glass-card rounded-xl p-6 flex items-start gap-4">
+                        <div
+                            class="w-12 h-12 rounded-lg bg-emerald-500/10 flex items-center justify-center text-emerald-400">
+                            <i class="ph ph-share-network text-2xl"></i>
+                        </div>
+                        <div>
+                            <p class="text-sm text-slate-400 mb-1">Endereço IP Virtual</p>
+                            <p id="virtual-ip" class="text-white font-mono text-xl">Aguardando...</p>
+                            <p class="text-xs text-slate-500 mt-2">Atribuído automaticamente pelo motor.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- VIEW: MODULES -->
+            <div id="view-modules" class="hidden space-y-6">
+                <div class="flex items-center justify-between mb-8">
+                    <div>
+                        <h3 class="text-2xl font-bold text-white mb-2">Marketplace de Módulos</h3>
+                        <p class="text-slate-400">Expanda as funcionalidades da sua VPN instantaneamente.</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="modules-container">
+                    <!-- Module Cards Injected Here -->
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Connect Modal (Hidden) -->
+    <div id="connect-modal"
+        class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden flex items-center justify-center">
+        <div class="glass-card w-full max-w-md rounded-2xl p-8 border border-slate-700/50 shadow-2xl">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-xl font-bold text-white">Entrar em uma Rede</h3>
+                <button onclick="closeModal()" class="text-slate-400 hover:text-white"><i
+                        class="ph ph-x text-xl"></i></button>
+            </div>
+
+            <div class="space-y-4 mb-8">
+                <div>
+                    <label class="block text-sm font-medium text-slate-400 mb-2">IP do Host Parceiro</label>
+                    <input type="text" id="target-ip"
+                        class="w-full bg-slate-900 border border-slate-700 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all"
+                        placeholder="ex: 177.50.20.10">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-slate-400 mb-2">Nome do Host</label>
+                    <input type="text" id="target-name"
+                        class="w-full bg-slate-900 border border-slate-700 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all"
+                        placeholder="ex: ServidorMatriz">
+                </div>
+            </div>
+
+            <button onclick="startConnection(false)"
+                class="w-full bg-primary hover:bg-blue-600 text-white font-semibold py-3 px-4 rounded-xl transition-all shadow-lg shadow-blue-500/25 flex items-center justify-center gap-2">
+                <i class="ph ph-plug"></i> Conectar Agora
+            </button>
+            <div class="mt-4 text-center">
+                <button onclick="startConnection(true)"
+                    class="text-sm text-slate-400 hover:text-white underline decoration-slate-600 underline-offset-4 transition-all">Ou
+                    apenas Hospedar (Modo Servidor)</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let isVpnOn = false;
+
+        function changeView(viewName) {
+            document.getElementById('view-dashboard').classList.add('hidden');
+            document.getElementById('view-modules').classList.add('hidden');
+
+            document.getElementById('nav-dashboard').className = 'w-full flex items-center gap-3 px-4 py-3 rounded-lg text-slate-400 hover:bg-slate-800/50 hover:text-slate-200 transition-colors';
+            document.getElementById('nav-modules').className = 'w-full flex items-center gap-3 px-4 py-3 rounded-lg text-slate-400 hover:bg-slate-800/50 hover:text-slate-200 transition-colors';
+
+            document.getElementById('view-' + viewName).classList.remove('hidden');
+            document.getElementById('nav-' + viewName).className = 'w-full flex items-center gap-3 px-4 py-3 rounded-lg bg-primary/10 text-primary font-medium transition-colors';
+
+            if (viewName === 'dashboard') document.getElementById('page-title').innerText = "Painel de Conexão";
+            if (viewName === 'modules') {
+                document.getElementById('page-title').innerText = "Módulos (Plugins)";
+                loadModules();
+            }
+        }
+
+        function toggleVPN() {
+            const toggle = document.getElementById('vpn-toggle');
+            if (toggle.checked && !isVpnOn) {
+                toggle.checked = false;
+                document.getElementById('connect-modal').classList.remove('hidden');
+            } else if (!toggle.checked && isVpnOn) {
+                isVpnOn = false;
+                updateVisualsOffline();
+            }
+        }
+
+        function closeModal() {
+            document.getElementById('connect-modal').classList.add('hidden');
+            document.getElementById('vpn-toggle').checked = false;
+        }
+
+        async function startConnection(isHost) {
+            const nome = document.getElementById('machine-name').value;
+            closeModal();
+            document.getElementById('vpn-toggle').checked = true;
+            isVpnOn = true;
+
+            document.getElementById('main-status-text').innerText = 'Conectando...';
+            document.getElementById('main-status-text').className = 'text-5xl font-bold text-yellow-400 tracking-tight animate-pulse';
+            document.getElementById('status-message').innerText = 'Negociando túnel peer-to-peer...';
+
+            if (isHost) {
+                await fetch('http://127.0.0.1:8080/api/hospedar', {
+                    method: 'POST', headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ nome_pc: nome })
+                });
+            } else {
+                const ip = document.getElementById('target-ip').value;
+                const alvo = document.getElementById('target-name').value;
+                await fetch('http://127.0.0.1:8080/api/conectar', {
+                    method: 'POST', headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ nome_pc: nome, ip_host: ip, alvo: alvo })
+                });
+            }
+        }
+
+        function updateVisualsOffline() {
+            document.getElementById('main-status-text').innerText = 'Offline';
+            document.getElementById('main-status-text').className = 'text-5xl font-bold text-white tracking-tight';
+            document.getElementById('top-indicator').className = 'w-2.5 h-2.5 rounded-full bg-slate-600';
+            document.getElementById('top-status-text').innerText = 'Desconectado';
+            document.getElementById('virtual-ip').innerText = 'Aguardando...';
+            document.getElementById('virtual-ip').className = 'text-slate-500 font-mono text-xl';
+            document.getElementById('status-message').innerText = 'Sua máquina está fora da OpenMesh. Clique no botão acima para ingressar na malha global.';
+        }
+
+        function updateVisualsOnline(ip) {
+            document.getElementById('main-status-text').innerText = 'Protegido';
+            document.getElementById('main-status-text').className = 'text-5xl font-bold text-emerald-400 tracking-tight drop-shadow-[0_0_15px_rgba(16,185,129,0.5)]';
+            document.getElementById('top-indicator').className = 'w-2.5 h-2.5 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.8)]';
+            document.getElementById('top-status-text').innerText = 'Túnel Estabelecido';
+            document.getElementById('top-status-text').className = 'text-sm font-medium text-emerald-400';
+            document.getElementById('virtual-ip').innerText = ip;
+            document.getElementById('virtual-ip').className = 'text-white font-mono text-xl';
+            document.getElementById('vpn-toggle').checked = true;
+            document.getElementById('status-message').innerText = 'Você está trafegando com criptografia peer-to-peer dentro da malha.';
+            isVpnOn = true;
+        }
+
+        setInterval(async () => {
+            if (!isVpnOn) return;
+            try {
+                const res = await fetch('http://127.0.0.1:8080/api/status');
+                const data = await res.json();
+                if (data.status === 'conectado' || data.status === 'online') {
+                    updateVisualsOnline(data.vpn_ip);
+                }
+            } catch (e) { }
+        }, 2000);
+
+        async function loadModules() {
+            try {
+                const res = await fetch('http://127.0.0.1:8080/api/modules');
+                const modules = await res.json();
+                const container = document.getElementById('modules-container');
+                container.innerHTML = '';
+
+                modules.forEach(mod => {
+                    const isActive = mod.active;
+                    const card = document.createElement('div');
+                    card.className = `glass-card rounded-2xl p-6 border ${isActive ? 'border-primary/50 ring-1 ring-primary/20 bg-primary/5' : 'border-slate-800'}`;
+                    
+                    card.innerHTML = `
+                        <div class="flex justify-between items-start mb-4">
+                            <div class="w-12 h-12 rounded-xl bg-slate-800/80 flex items-center justify-center text-white text-2xl shadow-inner">
+                                ${mod.icon || '📦'}
+                            </div>
+                            <div class="relative inline-block w-12 h-6 align-middle select-none">
+                                <input type="checkbox" id="mod-${mod.id}" ${isActive ? 'checked' : ''} class="module-toggle absolute block w-6 h-6 rounded-full bg-white border-2 border-slate-700 appearance-none cursor-pointer z-10" onclick="toggleModule('${mod.id}', this.checked)"/>
+                                <label for="mod-${mod.id}" class="block overflow-hidden h-6 rounded-full bg-slate-800 cursor-pointer transition-colors duration-300"></label>
+                            </div>
+                        </div>
+                        <h4 class="text-lg font-bold text-white mb-1">${mod.name}</h4>
+                        <p class="text-sm text-slate-400 leading-relaxed">${mod.description}</p>
+                    `;
+                    container.appendChild(card);
+                });
+            } catch (e) {
+                console.error("Módulos não carregados", e);
+            }
+        }
+
+        async function toggleModule(id, state) {
+            await fetch('http://127.0.0.1:8080/api/modules/toggle', {
+                method: 'POST', headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ id: id, active: state })
+            });
+            setTimeout(loadModules, 200);
+        }
+
+        // Initialize modules right away so they are ready
+        setTimeout(loadModules, 1000);
+
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,15 @@
+{
+  "name": "openmeshvpn",
+  "version": "1.0.0",
+  "description": "🌐 OpenMeshVPN (Nome Provisório)",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "electron": "^41.3.0"
+  }
+}
